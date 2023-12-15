@@ -40,7 +40,37 @@ ENV  AUXLUA_REPO=tgstation/auxlua
 #auxlua git tag
 ENV  AUXLUA_VERSION=1.4.1
 
-    
+
+
+
+
+ENV  BYOND_MAJOR=515
+ENV  BYOND_MINOR=1620
+
+#rust_g git tag
+ENV  RUST_G_VERSION=3.0.0
+
+#node version
+ENV  NODE_VERSION=14
+ENV  NODE_VERSION_PRECISE=14.16.1
+
+# SpacemanDMM git tag
+ENV  SPACEMAN_DMM_VERSION=suite-1.8
+
+# Python version for mapmerge and other tools
+ENV  PYTHON_VERSION=3.9.0
+
+#auxlua repo
+ENV  AUXLUA_REPO=tgstation/auxlua
+
+#auxlua git tag
+ENV  AUXLUA_VERSION=1.4.1
+
+#hypnagogic repo
+ENV  CUTTER_REPO=actioninja/hypnagogic
+
+#hypnagogic git tag
+ENV  CUTTER_VERSION=v3.0.1
     
 ARG DEBIAN_FRONTEND=noninteractive
 
