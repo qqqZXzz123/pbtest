@@ -1,9 +1,46 @@
 #based on /tg/station byond image
 
-FROM i386/ubuntu:bionic
+FROM ubuntu:xenial AS base
+RUN dpkg --add-architecture i386 \
+    && apt-get update \
+    && apt-get upgrade -y \
+    && apt-get dist-upgrade -y \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates
 
-ENV BYOND_MAJOR=514 \
-    BYOND_MINOR=1589
+FROM base AS byond
+WORKDIR /byond
+
+RUN apt-get install -y --no-install-recommends \
+        curl \
+        unzip \
+        make \
+        libstdc++6:i386
+
+# byond version
+ENV  BYOND_MAJOR=514
+ENV  BYOND_MINOR=1588
+
+#rust_g git tag
+ENV  RUST_G_VERSION=3.0.0
+
+#node version
+ENV  NODE_VERSION=14
+ENV  NODE_VERSION_PRECISE=14.16.1
+
+# SpacemanDMM git tag
+ENV  SPACEMAN_DMM_VERSION=suite-1.7.3
+
+# Python version for mapmerge and other tools
+ENV  PYTHON_VERSION=3.9.0
+
+#auxlua repo
+ENV  AUXLUA_REPO=tgstation/auxlua
+
+#auxlua git tag
+ENV  AUXLUA_VERSION=1.4.1
+
+    
     
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -35,6 +72,48 @@ RUN curl "http://www.byond.com/download/build/${BYOND_MAJOR}/${BYOND_MAJOR}.${BY
     && chmod 644 /usr/local/byond/man/man6/* \
     && cd .. \
     && rm -rf byond byond.zip /var/lib/apt/lists/*
+
+FROM byond AS build
+WORKDIR /tgstation
+
+RUN apt-get install -y --no-install-recommends \
+        curl
+
+COPY . .
+
+
+FROM base AS rust
+RUN apt-get install -y --no-install-recommends \
+        curl && \
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal \
+    && ~/.cargo/bin/rustup target add i686-unknown-linux-gnu
+
+FROM rust AS rust_g
+WORKDIR /rust_g
+
+RUN apt-get install -y --no-install-recommends \
+        pkg-config:i386 \
+        libssl-dev:i386 \
+        gcc-multilib \
+        git \
+    && git init \
+    && git remote add origin https://github.com/tgstation/rust-g
+
+RUN pwd \
+    && git fetch --depth 1 origin "${RUST_G_VERSION}" \
+    && git checkout FETCH_HEAD \
+    && env PKG_CONFIG_ALLOW_CROSS=1 ~/.cargo/bin/cargo build --release --target i686-unknown-linux-gnu
+
+FROM byond
+
+RUN apt-get install -y --no-install-recommends \
+        libssl1.0.0:i386 \
+        zlib1g:i386
+
+COPY --from=build /deploy ./
+COPY --from=rust_g /rust_g/target/i686-unknown-linux-gnu/release/librust_g.so ./librust_g.so
+
+    
 
 RUN locale-gen ru_RU.UTF-8
 ENV LANG ru_RU.UTF-8
