@@ -138,7 +138,7 @@ RUN apt install zlib1g-dev libjpeg-dev libpng-dev zlib1g
 #RUN pip3 install --upgrade pip
 #RUN pip3 install --upgrade pillow
 
-RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install --upgrade pip==20.3
 RUN python3 -m pip install --upgrade Pillow
 
 
