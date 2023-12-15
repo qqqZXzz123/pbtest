@@ -112,7 +112,7 @@ RUN apt-get install -y --no-install-recommends \
         libssl1.0.0:i386 \
         zlib1g:i386
 
-COPY --from=build /deploy ./
+#COPY --from=build /deploy ./
 COPY --from=rust_g /rust_g/target/i686-unknown-linux-gnu/release/librust_g.so ./librust_g.so
 
     
