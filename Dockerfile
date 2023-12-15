@@ -129,10 +129,14 @@ ENV TZ=Europe/Moscow
 RUN ln -fs /usr/share/zoneinfo/US/Pacific-New /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
 
+
+
+RUN apt install zlib1g-dev libjpeg-dev libpng-dev zlib1g
+
 #python packages
 #RUN pip3 install requests Pillow
 RUN pip3 install --upgrade pip
-RUN pip3 install requests Pillow
+RUN pip3 install --upgrade pillow
 
 
 
