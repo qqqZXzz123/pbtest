@@ -139,7 +139,7 @@ FROM byond
 RUN dpkg --add-architecture i386
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
-        libssl1.0.0:i386 \
+        libssl*:i386 \
         zlib1g:i386
 
 #COPY --from=build /deploy ./
