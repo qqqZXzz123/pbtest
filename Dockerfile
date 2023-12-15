@@ -135,8 +135,11 @@ RUN apt install zlib1g-dev libjpeg-dev libpng-dev zlib1g
 
 #python packages
 #RUN pip3 install requests Pillow
-RUN pip3 install --upgrade pip
-RUN pip3 install --upgrade pillow
+#RUN pip3 install --upgrade pip
+#RUN pip3 install --upgrade pillow
+
+RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install --upgrade Pillow
 
 
 
