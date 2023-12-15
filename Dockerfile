@@ -1,6 +1,6 @@
 #based on /tg/station byond image
 
-FROM ubuntu:xenial AS base
+FROM ubuntu:jammy AS base
 RUN dpkg --add-architecture i386 \
     && apt-get update \
     && apt-get upgrade -y \
